@@ -1,5 +1,7 @@
 package com.caldremch.common.base;
 
+import android.view.View;
+
 import androidx.annotation.LayoutRes;
 
 /**
@@ -10,8 +12,13 @@ import androidx.annotation.LayoutRes;
  **/
 public interface BaseInit {
 
-    @LayoutRes
-    int getLayoutId();
+    default View getLayoutView(){
+        return null;
+    }
+
+    default int getLayoutId(){
+        return 0;
+    }
 
     default void initView() {
     }

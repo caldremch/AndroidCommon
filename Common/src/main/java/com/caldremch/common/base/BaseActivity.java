@@ -20,7 +20,13 @@ public abstract class BaseActivity extends AbsActivity implements BaseInit {
         if (isUseEvent()) {
             EventManager.register(this);
         }
-        setContentView(getLayoutId());
+
+        //support view
+        if (getLayoutView() == null){
+            setContentView(getLayoutId());
+        }else{
+            setContentView(getLayoutView());
+        }
         initView();
         initData();
         initEvent();
