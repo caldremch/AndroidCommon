@@ -1,0 +1,12 @@
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+*.iml
+.gradle
+/local.properties
+/.idea*
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+
