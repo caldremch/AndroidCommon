@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:titleBarTitle="带标题的" />
 
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -26,6 +27,11 @@
         android:orientation="vertical"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/android_common_title_view_id">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/iv"
+            android:layout_height="wrap_content" />
 
         <com.caldremch.common.widget.MessageCountView
             android:id="@+id/tv"
