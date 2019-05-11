@@ -1,11 +1,16 @@
 package com.caldremch.androidcommon;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatDialog;
+
+import com.caldremch.common.utils.DensityUtil;
+import com.caldremch.common.utils.MetricsUtils;
 
 /**
  * @author Caldremch
@@ -23,12 +28,18 @@ public class BuyDialog extends AppCompatDialog {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         WindowManager.LayoutParams layout = getWindow().getAttributes();
-        layout.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        layout.height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+
+
+        layout.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layout.height =  WindowManager.LayoutParams.WRAP_CONTENT;
+        layout.gravity = Gravity.BOTTOM;
         getWindow().getDecorView().setPadding(0, 0, 0, 0);
         getWindow().setAttributes(layout);
+        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         init(context, style);
         setContentView(R.layout.bug_dialog);
+        ((FrameLayout)getWindow().getDecorView()).setClipChildren(false);
     }
 
     private void init(Context context, int style) {

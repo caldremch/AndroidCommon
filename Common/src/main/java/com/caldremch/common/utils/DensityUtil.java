@@ -1,6 +1,8 @@
 package com.caldremch.common.utils;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 /**
  * @author Caldremch
@@ -23,5 +25,31 @@ public class DensityUtil {
     public static int px2dp( float pxValue) {
         final float scale = Utils.getContext().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    public static int getScreenHeight(Context context) {
+        int result = 0;
+
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (manager != null) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            manager.getDefaultDisplay().getMetrics(metrics);
+            result = metrics.heightPixels;
+        }
+
+        return result;
+    }
+
+    public static int getScreenWidth(Context context) {
+        int result = 0;
+
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        if (manager != null) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            manager.getDefaultDisplay().getMetrics(metrics);
+            result = metrics.widthPixels;
+        }
+
+        return result;
     }
 }
