@@ -38,7 +38,7 @@ public class BuyDialog extends AppCompatDialog {
         getWindow().setAttributes(layout);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         init(context, style);
-        setContentView(R.layout.bug_dialog);
+        setContentView(R.layout.bug_dialog2);
         ((FrameLayout)getWindow().getDecorView()).setClipChildren(false);
     }
 
