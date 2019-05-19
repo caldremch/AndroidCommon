@@ -1,6 +1,7 @@
 package com.caldremch.common.base;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.ViewCompat;
 
 import com.caldremch.common.R;
+import com.caldremch.common.utils.DensityUtil;
 import com.caldremch.common.utils.MetricsUtils;
 import com.caldremch.common.widget.EasyTitleBar;
 import com.caldremch.common.widget.MultiStateView;
@@ -26,6 +29,7 @@ public class BaseLoadingActivity extends BaseActivity {
 
     private MultiStateView mStateView;
     private ConstraintLayout mRootLayout;
+    private ViewGroup mRealContentView;
 
     /**
      * 在BaseLoadingActivity子类中使用已经失效,无用设置
@@ -37,6 +41,7 @@ public class BaseLoadingActivity extends BaseActivity {
     public final int getLayoutId() {
         return 0;
     }
+
 
     protected int getContentViewId() {
         return 0;
@@ -56,40 +61,50 @@ public class BaseLoadingActivity extends BaseActivity {
         //加载
         if (getContentViewId() != 0) {
             ViewGroup childRootView = (ViewGroup) LayoutInflater.from(mContext).inflate(getContentViewId(), null);
+            mRealContentView = childRootView;
             if (childRootView != null) {
 
-                View titleView = childRootView.findViewById(R.id.android_common_title_view_id);
+                final View titleView = childRootView.findViewById(R.id.android_common_title_view_id);
 
                 if (titleView == null) {
-
+//
+//                    if (getInnerLayoutTitleViewId() != 0) {
+//
+//
+//
+//                    } else
+//
                     if (getTitleViewId() == 0) {
+
                         //默认 titleView
-                        EasyTitleBar defaultTitleView = new EasyTitleBar(mContext);
-                        mRootLayout.addView(defaultTitleView);
-                        ConstraintLayout.LayoutParams titleParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        titleParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
-                        titleParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
-                        titleParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
-                        defaultTitleView.setLayoutParams(titleParams);
-                        defaultTitleView.setTitle("默认标题");
-                        defaultTitleView.setId(R.id.default_android_common_title_view_id);
-                        initContentView(mRootLayout, childRootView, R.id.default_android_common_title_view_id);
+//                        EasyTitleBar defaultTitleView = new EasyTitleBar(mContext);
+//                        mRootLayout.addView(defaultTitleView);
+//                        ConstraintLayout.LayoutParams titleParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                        titleParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+//                        titleParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+//                        titleParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+//                        defaultTitleView.setLayoutParams(titleParams);
+//                        defaultTitleView.setTitle("默认标题");
+//                        defaultTitleView.setId(R.id.default_android_common_title_view_id);
+//                        initContentView(mRootLayout, childRootView, R.id.default_android_common_title_view_id);
+                        initContentView(mRootLayout, childRootView, ConstraintLayout.LayoutParams.PARENT_ID);
+
                     } else {
                         //自定义 titleView
-                        titleView = LayoutInflater.from(mContext).inflate(getTitleViewId(), mRootLayout, false);
-                        ConstraintLayout.LayoutParams titleParams = (ConstraintLayout.LayoutParams) titleView.getLayoutParams();
+                        View autoAddTitleView = LayoutInflater.from(mContext).inflate(getTitleViewId(), mRootLayout, false);
+                        ConstraintLayout.LayoutParams titleParams = (ConstraintLayout.LayoutParams) autoAddTitleView.getLayoutParams();
                         //内部做适配处理, 根据自己项目定制
-                        titleView.setPadding(0, MetricsUtils.getStatusBarHeight(mContext), 0, 0);
-                        mRootLayout.addView(titleView);
+                        autoAddTitleView.setPadding(0, MetricsUtils.getStatusBarHeight(mContext), 0, 0);
+                        mRootLayout.addView(autoAddTitleView);
                         titleParams.width = 0;
                         titleParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
                         titleParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
                         titleParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
-                        titleView.setLayoutParams(titleParams);
-                        if (titleView.getId() == View.NO_ID) {
-                            titleView.setId(R.id.default_android_common_title_view_id);
+                        autoAddTitleView.setLayoutParams(titleParams);
+                        if (autoAddTitleView.getId() == View.NO_ID) {
+                            autoAddTitleView.setId(R.id.default_android_common_title_view_id);
                         }
-                        initContentView(mRootLayout, childRootView, titleView.getId());
+                        initContentView(mRootLayout, childRootView, autoAddTitleView.getId());
 
                     }
                 } else {
@@ -99,30 +114,50 @@ public class BaseLoadingActivity extends BaseActivity {
 
                     //建立一个空的 View
                     View placeHolderView = new TextView(mContext);
-                    placeHolderView.setBackgroundColor(Color.TRANSPARENT);
+                    placeHolderView.setBackgroundColor(Color.RED);
                     mStateView = new MultiStateView(mContext);
                     mStateView.addView(placeHolderView);
 
                     //设置 ChildView 的布局参数
-                    ConstraintLayout.LayoutParams childRootViewLayoutParams = new ConstraintLayout.LayoutParams(0,0);
-                    childRootViewLayoutParams.topToTop =ConstraintLayout.LayoutParams.PARENT_ID;
+                    ConstraintLayout.LayoutParams childRootViewLayoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    childRootViewLayoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
                     childRootViewLayoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
                     childRootViewLayoutParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
                     childRootViewLayoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
                     childRootView.setLayoutParams(childRootViewLayoutParams);
-                    childRootView.addView(mStateView);
 
+
+                    //添加loadding到titleview的地下
                     //设置 stateView 的布局参数
-                    ConstraintLayout.LayoutParams stateViewLayoutParams = new ConstraintLayout.LayoutParams(0,0);
-                    stateViewLayoutParams.topToBottom =R.id.android_common_title_view_id;
+                    ConstraintLayout.LayoutParams stateViewLayoutParams = new ConstraintLayout.LayoutParams(0, 0);
+                    stateViewLayoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
                     stateViewLayoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
                     stateViewLayoutParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
                     stateViewLayoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
                     mStateView.setLayoutParams(stateViewLayoutParams);
 
+
                     mStateView.setViewForState(R.layout.common_layout_status_empty, MultiStateView.VIEW_STATE_EMPTY);
                     mStateView.setViewForState(R.layout.common_layout_status_loading, MultiStateView.VIEW_STATE_LOADING);
                     mStateView.setViewForState(R.layout.common_layout_status_error, MultiStateView.VIEW_STATE_ERROR);
+
+
+                    //根据titleView+状态栏 高度, 设置为loadingView的 topMargin, 为了让LoadingView不遮住titleView
+
+//                    stateViewLayoutParams.topMargin = titleView.getBottom();
+//                    stateViewLayoutParams.topMargin = DensityUtil.dp2px(80);
+                    Log.d("BASE", "DensityUtil.dp2px(80)-->" + DensityUtil.dp2px(80));
+                    childRootView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            int select = (titleView.getBottom() + MetricsUtils.getStatusBarHeight(mContext));
+                            Log.d("BASE", "titleView.getBottom()-->" + select);
+                            stateViewLayoutParams.topMargin = select;
+
+                        }
+                    });
+
+                    mRootLayout.addView(mStateView);
 
                     //设置 ContentView
                     FrameLayout.LayoutParams placeHolderViewParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -131,12 +166,12 @@ public class BaseLoadingActivity extends BaseActivity {
 
 
             }
-        }else{
-
-
+        } else {
+            //添加一个默认的布局
             TextView noLayoutHolder = new TextView(mContext);
-            ConstraintLayout.LayoutParams childRootViewLayoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            childRootViewLayoutParams.topToTop =ConstraintLayout.LayoutParams.PARENT_ID;
+//            mRealContentView = noLayoutHolder;
+            ConstraintLayout.LayoutParams childRootViewLayoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            childRootViewLayoutParams.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
             childRootViewLayoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
             childRootViewLayoutParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
             childRootViewLayoutParams.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
@@ -153,6 +188,12 @@ public class BaseLoadingActivity extends BaseActivity {
         return mRootLayout;
     }
 
+    /**
+     * Set the 'Z' translation for a view * * @param view {@link View} to set 'Z' translation for * @param translationZ 'Z' translation as float
+     */
+    public static void setTranslationZ(View view, float translationZ) {
+        ViewCompat.setTranslationZ(view, translationZ);
+    }
 
     /**
      * @param rootLayout    根布局
@@ -207,11 +248,23 @@ public class BaseLoadingActivity extends BaseActivity {
 
     protected final void onLoadingStatus() {
         if (mStateView != null) {
+            mStateView.bringToFront();
             mStateView.setViewState(MultiStateView.VIEW_STATE_LOADING);
         }
     }
 
+    /**
+     * 不设置在layout布局中的ViewId
+     *
+     * @return
+     */
     public int getTitleViewId() {
         return 0;
     }
+
+    @Deprecated
+    public int getInnerLayoutTitleViewId() {
+        return 0;
+    }
+
 }

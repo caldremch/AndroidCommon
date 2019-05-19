@@ -1,5 +1,7 @@
 package com.caldremch.androidcommon;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import com.caldremch.common.base.BaseLoadingActivity;
@@ -12,13 +14,22 @@ public class MainActivity extends BaseLoadingActivity {
 
     @Override
     public void initView() {
+        loadingTest();
 
+    }
+
+    private void loadingTest() {
+        onLoadingStatus();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onContentStatus();
+            }
+        }, 2000);
     }
 
     public void open(View view) {
-
-        BuyDialog dialog = new BuyDialog(mContext);
-        dialog.show();
-
+        loadingTest();
     }
+
 }
