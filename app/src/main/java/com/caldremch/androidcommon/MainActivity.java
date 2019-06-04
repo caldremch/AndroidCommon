@@ -1,12 +1,15 @@
 package com.caldremch.androidcommon;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import com.caldremch.common.base.BaseLoadingActivity;
+import com.caldremch.common.widget.seekbar.SeekBarView;
 
 public class MainActivity extends BaseLoadingActivity {
+
+    private SeekBarView mSeekBar;
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_main_with_diy_view;
@@ -14,7 +17,8 @@ public class MainActivity extends BaseLoadingActivity {
 
     @Override
     public void initView() {
-        loadingTest();
+//        loadingTest();
+        mSeekBar = findViewById(R.id.seekBar);
 
     }
 
@@ -29,7 +33,8 @@ public class MainActivity extends BaseLoadingActivity {
     }
 
     public void open(View view) {
-        loadingTest();
+//        loadingTest();
+        mSeekBar.stop();
     }
 
 }
