@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+
+Properties pro = new Properties()
+pro.load(new FileInputStream("config.properties"))
 android {
     compileSdkVersion 28
 
@@ -62,7 +65,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 }
 
-uploadArchives{
+uploadArchives {
     repositories {
         mavenDeployer {
             pom.groupId = 'com.caldremch.android'
@@ -70,16 +73,14 @@ uploadArchives{
             //最早版本为1.0.0, 每次打包+1
             pom.version = '1.0.3'
 //            repository(url: localMavenUrl)
-
             //远程仓库
-//            repository(url: 'http://47.106.156.156:8085/repository/maven-android/') {
-            repository(url: 'http://192.168.0.105:32778/repository/maven-android/') { //家里内网
+//            repository(url: 'http://192.168.0.105:32778/repository/maven-android/') { //家里内网
+//                authentication(userName: 'admin', password: 'admin123')
+//            }
+            repository(url: 'https://repo.rdc.aliyun.com/repository/73687-snapshot-xVtPQv/') {
+                //家里内网
 //            repository(url: 'http://192.168.40.48:8081/repository/maven-android/') { //公司内容
-                authentication (userName:'admin', password:'admin123')
-            }
-
-            repository(url: 'http://192.168.40.48:8081/repository/maven-android/') { //公司内容
-                authentication (userName:'admin', password:'admin123')
+                authentication(userName: pro.getProperty("userName"), password: pro.getProperty("password"))
             }
         }
     }
