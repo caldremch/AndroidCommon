@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.caldremch.common.utils.MetricsUtils;
 import com.gyf.barlibrary.ImmersionBar;
@@ -23,7 +24,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
  * @Email caldremch@163.com
  * @describe
  **/
-public abstract class AbsActivity extends RxAppCompatActivity {
+public abstract class AbsActivity extends AppCompatActivity {
     protected Activity mContext;
 
     //沉浸式
